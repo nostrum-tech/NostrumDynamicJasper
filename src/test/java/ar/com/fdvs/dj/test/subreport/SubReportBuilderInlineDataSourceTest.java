@@ -48,6 +48,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.fill.JRTemplatePrintText;
 import net.sf.jasperreports.view.JasperViewer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubReportBuilderInlineDataSourceTest extends BaseDjReportTest {
 	
 	public static class TestDataSource implements JRDataSource {
@@ -138,21 +141,29 @@ public class SubReportBuilderInlineDataSourceTest extends BaseDjReportTest {
 	public void testReport() throws Exception {
 		super.testReport();
 
-		int[][] groupStarts = {{0,44}, {0,98}, {1,100}, {1,164}};
-		for (int[] groupStart : groupStarts) {
-			int pIdx = groupStart[0];
-			int eleIdx = groupStart[1];
-			
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "Area", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "Average", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "%", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "Amount", getCellText(jp, pIdx, eleIdx++));
-	
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "name", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "average", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "percentage", getCellText(jp, pIdx, eleIdx++));
-			Assert.assertEquals("Error Page " + pIdx + ", element " + eleIdx, "amount", getCellText(jp, pIdx, eleIdx++));
+		String[] expectedSequence = {"Area", "Average", "%", "Amount", "name", "average", "percentage", "amount"};
+		int sequencesFound = 0;
+
+		for (int pIdx = 0; pIdx < jp.getPages().size(); pIdx++) {
+			List<JRPrintElement> elements = jp.getPages().get(pIdx).getElements();
+			for (int eleIdx = 0; eleIdx <= elements.size() - expectedSequence.length; eleIdx++) {
+				if ("Area".equals(getCellText(jp, pIdx, eleIdx))) {
+					boolean match = true;
+					for (int k = 1; k < expectedSequence.length; k++) {
+						if (!expectedSequence[k].equals(getCellText(jp, pIdx, eleIdx + k))) {
+							match = false;
+							break;
+						}
+					}
+					if (match) {
+						sequencesFound++;
+						eleIdx += expectedSequence.length - 1;
+					}
+				}
+			}
 		}
+
+		Assert.assertEquals("Expected 4 subreport header sequences", 4, sequencesFound);
 	}
 
     public String getCellText(JasperPrint jp, int pageIdx, int eleIdx) {

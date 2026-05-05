@@ -67,7 +67,10 @@ public class VariableRegistrationManager extends
 		}
 
 		if (var.getIncrementType() != null){
-			jrvar.setIncrementType(IncrementTypeEnum.values()[var.getIncrementType().getValue()]);
+			final byte incValue = var.getIncrementType().getValue();
+			if (incValue < IncrementTypeEnum.values().length) {
+				jrvar.setIncrementType(IncrementTypeEnum.values()[incValue]);
+			}
 		}
 
 		if ((var.getIncrementGroup() != null) && DJVariableIncrementType.GROUP.equals(var.getIncrementType())){

@@ -185,9 +185,9 @@ public class DataSetFactory {
 	}
 
 	private static void setResetStyle(JRDesignChartDataset dataset, JRDesignGroup group, JRDesignGroup parentGroup){
-		//When to start a new chart? When the group's parent changes
+		//When to start a new chart? When the parent's parent changes
 		dataset.setResetGroup(parentGroup.getName());
-		if (dataset.getResetGroup().equals(group.getName())) {
+		if (group.getName() != null && group.getName().equals(dataset.getResetGroup())) {
             dataset.setResetType( DatasetResetTypeEnum.REPORT );
         } else {
             dataset.setResetType( DatasetResetTypeEnum.GROUP );

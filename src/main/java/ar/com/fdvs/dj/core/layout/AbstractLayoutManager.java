@@ -1158,7 +1158,7 @@ public abstract class AbstractLayoutManager implements LayoutManager {
             }
         }
         //Chart-dependent options
-        if (djChart.getType() == DJChart.BAR_CHART) {
+        if (djChart.getType() == DJChart.BAR_CHART && chart.getPlot() instanceof JRDesignBarPlot) {
             ((JRDesignBarPlot) chart.getPlot()).setShowTickLabels(options.isShowLabels());
         }
     }

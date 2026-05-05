@@ -70,7 +70,7 @@ public class DJJRJdk13Compiler extends JRJdk13Compiler {
 
         try {
             Class clazz = JRClassLoader.loadClassForName("com.sun.tools.javac.Main");
-            Object compiler = clazz.newInstance();
+            Object compiler = clazz.getDeclaredConstructor().newInstance();
 
             try {
                 Method compileMethod = clazz.getMethod("compile", String[].class, PrintWriter.class);
@@ -103,10 +103,9 @@ public class DJJRJdk13Compiler extends JRJdk13Compiler {
     }
 
     public static boolean isValid() {
-        try {
-            return JRClassLoader.loadClassForName("com.sun.tools.javac.Main") != null;
-        } catch (ClassNotFoundException ex) {
-            return false;
-        }
+        // com.sun.tools.javac is in jdk.compiler module which is not exported to unnamed
+        // modules under JPMS (Java 9+). Disable this compiler path to avoid
+        // InaccessibleObjectException at runtime.
+        return false;
     }
 }
