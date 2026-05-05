@@ -48,8 +48,8 @@ public class DJChart extends DJBaseElement{
 	private static final long serialVersionUID = Entity.SERIAL_VERSION_UID;
 
 	//The possible chart types
-	public static final byte PIE_CHART = 9;
-	public static final byte BAR_CHART = 3;
+	public static final byte PIE_CHART = 8;
+	public static final byte BAR_CHART = 2;
 //	public static final byte LINE_CHART = JRDesignChart.CHART_TYPE_LINE; //not yet... to much to think left
 
 	//The possible calculation types

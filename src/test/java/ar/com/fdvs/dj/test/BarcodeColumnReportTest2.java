@@ -88,14 +88,14 @@ public class BarcodeColumnReportTest2 extends BaseDjReportTest {
 	
 	protected JRDataSource getDataSource() {
 		List<Product> dummyCollection = TestRepositoryProducts.getDummyCollection();
-		dummyCollection.add(new Product( new Long("1"),
+		dummyCollection.add(new Product( Long.valueOf("1"),
 				"book",
 				"Harry Potter 7",
 				"Florida",
 				"Main Street, Main Street, Main Street, Main Street, Main Street, Main Street, " +
 				"Main Street, Main Street, Main Street, Main Street, Main Street, Main Street, " +
 				"Main Street, Main Street, Main Street, Main Street, Main Street (end)",
-				new Long("2500"), new Float("10000")));
+				Long.valueOf("2500"), Float.valueOf("10000")));
 		dummyCollection = SortUtils.sortCollection(dummyCollection,dr.getColumns());
 
 		//here contains dummy hardcoded objects...

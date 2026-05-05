@@ -21,6 +21,12 @@ import net.sf.jasperreports.view.JasperViewer;
 public class HQLReportTest extends BaseDjReportTest {
 
 	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		TestSchema.buildConfiguration();
+	}
+
+	@Override
     public DynamicReport buildReport() throws Exception {
 		final Style groupStyle = new StyleBuilder(false).setFont(new Font(18, Font._FONT_VERDANA, true)).build();
 		/*
@@ -66,9 +72,8 @@ public class HQLReportTest extends BaseDjReportTest {
 	public void testHibernate() {
 		TestSchema.buildConfiguration();
 		final Session s = HibernateUtil.getSession();
-		final List l = s.createQuery("from Customer order by lastName").list();
-		for (final Object aL : l) {
-			final Customer cust = (Customer) aL;
+		final List<Customer> l = s.createSelectionQuery("from Customer order by lastName", Customer.class).getResultList();
+		for (final Customer cust : l) {
 			log.debug(cust.getFirstName() + ", " + cust.getLastName());
 		}
 	}

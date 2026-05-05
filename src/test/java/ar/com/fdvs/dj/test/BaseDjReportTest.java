@@ -37,6 +37,7 @@ import ar.com.fdvs.dj.domain.DynamicReport;
 import ar.com.fdvs.dj.util.SortUtils;
 import junit.framework.TestCase;
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -50,6 +51,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class BaseDjReportTest extends TestCase {
@@ -60,6 +62,21 @@ public abstract class BaseDjReportTest extends TestCase {
 
     protected static final Log log = LogFactory.getLog(BaseDjReportTest.class);
 
+    private Locale savedLocale;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        savedLocale = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        Locale.setDefault(savedLocale);
+        super.tearDown();
+    }
+
     protected JasperPrint jp;
     protected JasperReport jr;
     protected final Map<String, Object> params = new HashMap<String, Object>();
@@ -69,6 +86,11 @@ public abstract class BaseDjReportTest extends TestCase {
 
     public void testReport() throws Exception {
         dr = buildReport();
+
+        if (dr.getReportLocale() == null) {
+            dr.setReportLocale(Locale.US);
+        }
+        params.put(JRParameter.REPORT_LOCALE, dr.getReportLocale());
 
 			/*
               Get a JRDataSource implementation
@@ -151,8 +173,9 @@ public abstract class BaseDjReportTest extends TestCase {
      * @throws Exception
      */
     public static Connection createSQLConnection() throws Exception {
-        Class.forName("org.hsqldb.jdbcDriver");
-        return DriverManager.getConnection("jdbc:hsqldb:file:target/test-classes/hsql/test_dj_db", "sa", "");
+        ar.com.fdvs.dj.test.hibernate.TestSchema.ensureDbInitialized();
+        Class.forName("org.hsqldb.jdbc.JDBCDriver");
+        return DriverManager.getConnection("jdbc:hsqldb:mem:test_dj_db", "sa", "");
     }
 
     public int getYear() {

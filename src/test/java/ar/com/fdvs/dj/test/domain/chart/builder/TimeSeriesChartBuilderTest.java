@@ -215,7 +215,7 @@ public class TimeSeriesChartBuilderTest extends BaseDjReportTest {
 
 	public void testDataset() {
 		final JRDesignTimeSeriesDataset dataset = (JRDesignTimeSeriesDataset) chart.getDataset();
-		assertEquals(Month.class, dataset.getTimePeriod());
+		assertEquals(TimePeriodEnum.MONTH, dataset.getTimePeriod());
 		assertEquals(2, dataset.getSeriesList().size());
 		assertNotNull(dataset.getSeries()[0].getLabelExpression().getText());
 		assertNotNull(dataset.getSeries()[0].getSeriesExpression().getText());

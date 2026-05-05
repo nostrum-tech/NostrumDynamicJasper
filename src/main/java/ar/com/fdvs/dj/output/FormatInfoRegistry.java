@@ -118,7 +118,7 @@ public class FormatInfoRegistry {
 
         public Exporter getExporterInstance() {
             try {
-                return (Exporter)Class.forName(exporterClass).newInstance();
+                return (Exporter) Class.forName(exporterClass).getDeclaredConstructor().newInstance();
             } catch (final Exception ex) {
                 return null;
             }
@@ -126,7 +126,7 @@ public class FormatInfoRegistry {
 
         public LayoutManager getLayoutManagerInstance() {
             try {
-                return (LayoutManager)Class.forName(layoutManagerClass).newInstance();
+                return (LayoutManager) Class.forName(layoutManagerClass).getDeclaredConstructor().newInstance();
             } catch (final Exception ex) {
                 return null;
             }

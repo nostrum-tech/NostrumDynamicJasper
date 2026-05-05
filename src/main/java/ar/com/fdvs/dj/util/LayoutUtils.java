@@ -79,7 +79,7 @@ public class LayoutUtils {
 					final JRDesignStyle style = new JRDesignStyle();
 					dest = constructor.newInstance(style.getDefaultStyleProvider());
 				} else {
-					dest = element.getClass().newInstance();
+					dest = element.getClass().getDeclaredConstructor().newInstance();
 				}
 
 				BeanUtils.copyProperties(dest, element);
